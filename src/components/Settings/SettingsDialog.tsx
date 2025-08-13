@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -10,7 +9,6 @@ import {
 } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { Settings } from "lucide-react";
 import { useToast } from "../../contexts/toast";
 
 type APIProvider = "openai" | "gemini" | "anthropic";
@@ -46,6 +44,31 @@ const modelCategories: ModelCategory[] = [
         id: "gpt-4o-mini",
         name: "gpt-4o-mini",
         description: "Faster, more cost-effective option"
+      },
+      {
+        id: "gpt-5",
+        name: "gpt-5",
+        description: "Latest GPT-5 model with enhanced capabilities"
+      },
+      {
+        id: "gpt-5-mini",
+        name: "gpt-5-mini",
+        description: "Faster, more cost-effective GPT-5 option"
+      },
+      {
+        id: "gpt-5-nano",
+        name: "gpt-5-nano",
+        description: "Fastest, most cost-effective GPT-5 option"
+      },
+      {
+        id: "o3-mini-2025-01-31",
+        name: "o3-mini-2025-01-31",
+        description: "Latest O3 mini model with enhanced capabilities"
+      },
+      {
+        id: "o3-mini",
+        name: "o3-mini",
+        description: "Fast, cost-effective O3 option"
       }
     ],
     geminiModels: [
@@ -92,6 +115,31 @@ const modelCategories: ModelCategory[] = [
         id: "gpt-4o-mini",
         name: "gpt-4o-mini",
         description: "Faster, more cost-effective option"
+      },
+      {
+        id: "gpt-5",
+        name: "gpt-5",
+        description: "Latest GPT-5 model with enhanced coding capabilities"
+      },
+      {
+        id: "gpt-5-mini",
+        name: "gpt-5-mini",
+        description: "Faster, more cost-effective GPT-5 option"
+      },
+      {
+        id: "gpt-5-nano",
+        name: "gpt-5-nano",
+        description: "Fastest, most cost-effective GPT-5 option"
+      },
+      {
+        id: "o3-mini-2025-01-31",
+        name: "o3-mini-2025-01-31",
+        description: "Latest O3 mini model with enhanced coding capabilities"
+      },
+      {
+        id: "o3-mini",
+        name: "o3-mini",
+        description: "Fast, cost-effective O3 option"
       }
     ],
     geminiModels: [
@@ -138,6 +186,31 @@ const modelCategories: ModelCategory[] = [
         id: "gpt-4o-mini",
         name: "gpt-4o-mini",
         description: "Faster, more cost-effective option"
+      },
+      {
+        id: "gpt-5",
+        name: "gpt-5",
+        description: "Latest GPT-5 model with enhanced debugging capabilities"
+      },
+      {
+        id: "gpt-5-mini",
+        name: "gpt-5-mini",
+        description: "Faster, more cost-effective GPT-5 option"
+      },
+      {
+        id: "gpt-5-nano",
+        name: "gpt-5-nano",
+        description: "Fastest, most cost-effective GPT-5 option"
+      },
+      {
+        id: "o3-mini-2025-01-31",
+        name: "o3-mini-2025-01-31",
+        description: "Latest O3 mini model with enhanced debugging capabilities"
+      },
+      {
+        id: "o3-mini",
+        name: "o3-mini",
+        description: "Fast, cost-effective O3 option"
       }
     ],
     geminiModels: [
@@ -342,7 +415,7 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
                   />
                   <div className="flex flex-col">
                     <p className="font-medium text-white text-sm">OpenAI</p>
-                    <p className="text-xs text-white/60">GPT-4o models</p>
+                    <p className="text-xs text-white/60">GPT-4o, GPT-5 & O3 models</p>
                   </div>
                 </div>
               </div>

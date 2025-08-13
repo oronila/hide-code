@@ -60,8 +60,8 @@ export class ConfigHelper extends EventEmitter {
    */
   private sanitizeModelSelection(model: string, provider: "openai" | "gemini" | "anthropic"): string {
     if (provider === "openai") {
-      // Only allow gpt-4o and gpt-4o-mini for OpenAI
-      const allowedModels = ['gpt-4o', 'gpt-4o-mini'];
+      // Only allow gpt-4o, gpt-4o-mini, gpt-5, gpt-5-mini, gpt-5-nano, o3-mini-2025-01-31, and o3-mini for OpenAI
+const allowedModels = ['gpt-4o', 'gpt-4o-mini', 'gpt-5', 'gpt-5-mini', 'gpt-5-nano', 'o3-mini-2025-01-31', 'o3-mini'];
       if (!allowedModels.includes(model)) {
         console.warn(`Invalid OpenAI model specified: ${model}. Using default model: gpt-4o`);
         return 'gpt-4o';
@@ -325,22 +325,30 @@ export class ConfigHelper extends EventEmitter {
       // Make a simple API call to test the key
       await openai.models.list();
       return { valid: true };
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('OpenAI API key test failed:', error);
-      
+
       // Determine the specific error type for better error messages
       let errorMessage = 'Unknown error validating OpenAI API key';
-      
-      if (error.status === 401) {
+
+      const err = error as Record<string, unknown>;
+      const status = typeof err['status'] === 'number' ? (err['status'] as number) : undefined;
+
+      if (status === 401) {
         errorMessage = 'Invalid API key. Please check your OpenAI key and try again.';
-      } else if (error.status === 429) {
+      } else if (status === 429) {
         errorMessage = 'Rate limit exceeded. Your OpenAI API key has reached its request limit or has insufficient quota.';
-      } else if (error.status === 500) {
+      } else if (status === 500) {
         errorMessage = 'OpenAI server error. Please try again later.';
-      } else if (error.message) {
-        errorMessage = `Error: ${error.message}`;
+      } else {
+        const message = error instanceof Error
+          ? error.message
+          : (typeof err['message'] === 'string' ? (err['message'] as string) : undefined);
+        if (message) {
+          errorMessage = `Error: ${message}`;
+        }
       }
-      
+
       return { valid: false, error: errorMessage };
     }
   }
@@ -358,14 +366,19 @@ export class ConfigHelper extends EventEmitter {
         return { valid: true };
       }
       return { valid: false, error: 'Invalid Gemini API key format.' };
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Gemini API key test failed:', error);
       let errorMessage = 'Unknown error validating Gemini API key';
-      
-      if (error.message) {
-        errorMessage = `Error: ${error.message}`;
+
+      const message = error instanceof Error
+        ? error.message
+        : (typeof (error as Record<string, unknown>)['message'] === 'string'
+            ? ((error as Record<string, unknown>)['message'] as string)
+            : undefined);
+      if (message) {
+        errorMessage = `Error: ${message}`;
       }
-      
+
       return { valid: false, error: errorMessage };
     }
   }
@@ -383,14 +396,19 @@ export class ConfigHelper extends EventEmitter {
         return { valid: true };
       }
       return { valid: false, error: 'Invalid Anthropic API key format.' };
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Anthropic API key test failed:', error);
       let errorMessage = 'Unknown error validating Anthropic API key';
-      
-      if (error.message) {
-        errorMessage = `Error: ${error.message}`;
+
+      const message = error instanceof Error
+        ? error.message
+        : (typeof (error as Record<string, unknown>)['message'] === 'string'
+            ? ((error as Record<string, unknown>)['message'] as string)
+            : undefined);
+      if (message) {
+        errorMessage = `Error: ${message}`;
       }
-      
+
       return { valid: false, error: errorMessage };
     }
   }
